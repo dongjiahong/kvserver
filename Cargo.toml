@@ -1,13 +1,27 @@
 [package]
+edition = "2021"
 name = "kvserver"
 version = "0.1.0"
-edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-prost = "0.9"
-thiserror = "1.0"
+bytes = "1" # 高效处理网络Buffer库
+dashmap = "4" # 并发HashMap
+http = "0.2" 
+prost = "0.9" # 处理protobuf的代码
+thiserror = "1.0" 
+tracing = "0.1" # 日志处理
+
+# 有时仅在测试中才需要一些依赖（比如基准测试相关的）。
+# 这种依赖要写在 Cargo.toml 的 [dev-dependencies] 部分。
+# 这些依赖不会传播给其他依赖于这个包的包
+[dev-dependencies]
+anyhow = "1" # 处理错误
+async-prost = "0.3" # 支持把protobuf封装成TCP
+futures = "0.3" # 提供Stream trait
+tokio = {version = "1", features = ["rt", "rt-multi-thread", "io-util", "macros", "net"]} 
+tracing-subscriber = "0.2" # 日志处理
 
 [build-dependencies]
-prost-build = "0.9"
+prost-build = "0.9" # 编译protobuf
